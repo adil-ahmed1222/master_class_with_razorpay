@@ -14,13 +14,14 @@ export const workflowDemoSection = {
     inputHelper: "Sample prompt for this demo. In the session you will wire your own.",
     previewTitle: "What this walkthrough covers",
     previewSteps: [
-      "Webhook catches the lead",
-      "AI Agent scores and prioritizes",
-      "Telegram notifies your team",
-      "Email Generator writes the copy",
-      "Gmail saves the draft",
+      "Input receives prompts",
+      "Planner routes the work",
+      "Retriever fetches knowledge",
+      "Tools execute APIs",
+      "Memory persists state",
+      "Output streams the response",
     ] as const,
-    generateHint: "Interactive demo · scroll through each step after you generate",
+    generateHint: "Interactive demo · scroll the orbit to open each node one at a time",
   },
 } as const;
 

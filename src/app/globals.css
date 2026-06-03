@@ -77,6 +77,18 @@
   /* ---- Easing (motion system, see 06-motion) ---- */
   --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-in-out-smooth: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* Aurora site background (docs/AURORA-BACKGROUND.md) */
+  --animate-aurora: aurora 60s linear infinite;
+}
+
+@keyframes aurora {
+  from {
+    background-position: 50% 50%, 50% 50%;
+  }
+  to {
+    background-position: 350% 50%, 350% 50%;
+  }
 }
 
 /* Derived / non-utility design constants (alpha variants, hairlines, glows). */
@@ -238,29 +250,3 @@
   clip-path: inset(0 0 0 0);
 }
 
-/* docs/ANIMATED_BACKGROUND.md */
-.mask-radial {
-  -webkit-mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
-  mask-image: radial-gradient(ellipse at center, #000 30%, transparent 75%);
-}
-
-.bg-grid-fine {
-  background-image:
-    linear-gradient(to right, rgb(255 255 255 / 0.025) 1px, transparent 1px),
-    linear-gradient(to bottom, rgb(255 255 255 / 0.025) 1px, transparent 1px);
-  background-size: 28px 28px;
-}
-
-.bg-noise {
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 0.06 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
-}
-
-.site-bg-static {
-  position: absolute;
-  inset: 0;
-  background-color: var(--color-bg);
-  background-image:
-    radial-gradient(ellipse 80% 65% at 78% 42%, rgb(79 124 255 / 0.45) 0%, transparent 58%),
-    radial-gradient(ellipse 60% 50% at 55% 50%, rgb(54 225 255 / 0.18) 0%, transparent 52%),
-    radial-gradient(ellipse 100% 90% at 50% 100%, rgb(5 5 5) 0%, rgb(5 5 5) 70%);
-}

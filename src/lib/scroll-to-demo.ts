@@ -11,8 +11,7 @@ function getNavOffsetPx(): number {
 }
 
 /**
- * Align the workflow scroll track to the top of the viewport so step 1 is visible.
- * Used after "Generate Workflow" and when the track already exists.
+ * Align the workflow scroll track so step 1 is visible (after Generate Workflow).
  */
 export function scrollToWorkflowTrack(duration = 0.85): void {
   const track =
@@ -36,24 +35,22 @@ export function scrollToWorkflowTrack(duration = 0.85): void {
 }
 
 /**
- * Scroll to the live workflow demo with content visible immediately.
- * 1. Prefer the pinned track position (past ScrollStory entry fade + stage 0).
- * 2. Fall back to #demo intro (always has copy + step 1 preview).
+ * Scroll to the live workflow demo (#demo intro or pinned scroll track when generated).
  */
 export function scrollToDemo(source: string): void {
   track("watch_demo_click", { source });
   const offset = -getNavOffsetPx();
   const lenis = getLenis();
 
-  const storyTrack =
+  const trackEl =
     document.getElementById("workflow-demo-track") ??
     document.querySelector<HTMLElement>("[data-scroll-story-track='workflow']");
   const intro = document.getElementById("demo");
 
   let target: HTMLElement | number | null = null;
 
-  if (storyTrack) {
-    target = storyTrack.getBoundingClientRect().top + window.scrollY;
+  if (trackEl) {
+    target = trackEl.getBoundingClientRect().top + window.scrollY;
   } else if (intro) {
     target = intro;
   }

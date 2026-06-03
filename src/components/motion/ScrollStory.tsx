@@ -84,6 +84,8 @@ type ScrollStoryProps = {
    * avoid scroll fatigue / excessive pinning without changing the number of beats.
    */
   stageVh?: number;
+  /** GSAP scrub catch-up duration in seconds (default 1). Higher = slower, smoother progress. */
+  scrubSeconds?: number;
   /** Optional marker for imperative scroll targets (e.g. Watch Demo). */
   scrollStoryTrack?: string;
   /** Optional id on the tall scroll track element (e.g. workflow demo anchor). */
@@ -107,6 +109,7 @@ const DEFAULT_STICKY =
 export function ScrollStory({
   stageCount,
   stageVh = 100,
+  scrubSeconds = SCRUB,
   scrollStoryTrack,
   trackId,
   skipEntryFade = false,
@@ -180,7 +183,7 @@ export function ScrollStory({
           trigger: track,
           start: "top top",
           end: "bottom bottom",
-          scrub: SCRUB,
+          scrub: scrubSeconds,
         },
         onUpdate: () => apply(proxy.value),
       });
@@ -215,7 +218,7 @@ export function ScrollStory({
     }
 
     return () => ctx.revert();
-  }, [reduced, stageCount, skipEntryFade, pin]);
+  }, [reduced, stageCount, stageVh, scrubSeconds, skipEntryFade, pin]);
 
   if (reduced) {
     return (

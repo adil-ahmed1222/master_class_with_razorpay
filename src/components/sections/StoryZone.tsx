@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 
 /**
  * StoryZone — hero + narrative sections (2–5).
- * Site-wide Sentient Canvas (Phase 7A) mounts in layout; no local atmosphere.
+ * Site-wide aurora background mounts in layout; no local atmosphere.
  */
 export function StoryZone({ children }: { children: ReactNode }) {
   return (
