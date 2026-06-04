@@ -26,6 +26,7 @@
   /* ---- Fonts (wired to next/font CSS variables, see src/lib/fonts.ts) ---- */
   --font-display: var(--font-space-grotesk), ui-sans-serif, system-ui, sans-serif;
   --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-brand: var(--font-poppins), ui-sans-serif, system-ui, sans-serif;
 
   /* ---- Fluid type scale (clamp-based) ---- */
   --text-display-xl: clamp(3.5rem, 8vw, 7.5rem);

@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { Button, EventPrice } from "@/components/ui";
+import { BrandWordmark, Button, EventPrice } from "@/components/ui";
 import { event } from "@/content/event";
 import { scrollToRegister } from "@/lib/scroll-to-register";
 import { cn } from "@/lib/utils";
@@ -36,13 +36,7 @@ export function TopNav() {
       )}
     >
       <nav className="mx-auto flex h-16 max-w-content items-center justify-between px-4 sm:px-6">
-        <a
-          href="#top"
-          className="font-display text-body-lg font-semibold tracking-tight text-text focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary"
-        >
-          {event.brand}
-          <span className="text-primary">.</span>
-        </a>
+        <BrandWordmark linkToTop priority />
 
         <div className="flex items-center gap-4">
           <span className="hidden font-sans text-caption text-text-2 sm:inline">

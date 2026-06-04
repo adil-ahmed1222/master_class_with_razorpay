@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { ConversionSectionScrim } from "@/components/background/ConversionSectionScrim";
-import { Container, Caption, EventPrice } from "@/components/ui";
+import { BrandWordmark, Container, Caption, EventPrice } from "@/components/ui";
 import { FooterDemoLink } from "@/components/sections/FooterDemoLink";
 import { event } from "@/content/event";
 import { footer } from "@/content/footer";
@@ -47,10 +47,9 @@ export function FooterSection() {
         <div className="grid grid-cols-1 gap-12 md:grid-cols-12 md:gap-x-8 md:gap-y-16 lg:gap-x-12">
           {/* Event identity — primary footer column */}
           <div className="md:col-span-5 lg:col-span-5">
-            <p className="font-display text-body-lg font-semibold tracking-tight text-text">
-              {event.brand}
-              <span className="text-primary">.</span>
-            </p>
+            <div className="mb-1">
+              <BrandWordmark variant="footer" />
+            </div>
             <p className="mt-3 font-display text-h3 font-semibold tracking-tight text-text">
               {event.title}
             </p>
