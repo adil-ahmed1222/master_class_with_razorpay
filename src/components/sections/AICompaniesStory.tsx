@@ -2,7 +2,13 @@
 
 import { useRef, type RefObject } from "react";
 import { Container, Display, Headline, Body, Eyebrow, Button, EventPrice } from "@/components/ui";
-import { ScrollStory, StoryStage, useStoryProgress, usePrefersReducedMotion } from "@/components/motion";
+import {
+  ScrollStory,
+  StoryStage,
+  useStoryProgress,
+  usePrefersReducedMotion,
+} from "@/components/motion";
+import { useIsLgUp } from "@/components/motion/use-media-query";
 import { EventMeta } from "@/components/sections/EventMeta";
 import { BrandMark } from "@/components/sections/BrandLogos";
 import { aiCompanies, type AICompany } from "@/content/ai-companies";
@@ -29,14 +35,16 @@ import { clamp, cn } from "@/lib/utils";
  * are forced visible; the scrub-only progress rail is omitted.
  */
 
-const STAGE_VH = 72;
+const STAGE_VH_DESKTOP = 72;
+/** Shorter track on mobile so crossfades keep pace with touch scroll. */
+const STAGE_VH_MOBILE = 50;
 const DEFAULT_TINT = "#36e1ff"; // site accent — used outside the company range
 const N = aiCompanies.length; // 10
 const TOTAL_STAGES = N + 4; // intro + 10 + ensemble + payoff + cta = 14
 
 /** Pin below fixed nav; use dvh so mobile browser chrome does not clip content. */
 const AI_COMPANIES_STICKY =
-  "sticky top-[var(--nav-h)] z-10 h-[calc(100dvh-var(--nav-h))] max-h-[calc(100dvh-var(--nav-h))] overflow-hidden bg-bg";
+  "sticky top-[var(--nav-h)] z-10 h-[calc(100dvh-var(--nav-h))] max-h-[calc(100dvh-var(--nav-h))] touch-pan-y overflow-hidden bg-bg";
 
 function handleReserve() {
   scrollToRegister("ai-companies");
@@ -44,6 +52,7 @@ function handleReserve() {
 
 export function AICompaniesStory() {
   const reduced = usePrefersReducedMotion();
+  const isLgUp = useIsLgUp();
   const chapterRefs = useRef<(HTMLDivElement | null)[]>([]);
   const glowRef = useRef<HTMLDivElement>(null);
   const railRef = useRef<HTMLDivElement>(null);
@@ -54,7 +63,9 @@ export function AICompaniesStory() {
   return (
     <ScrollStory
       stageCount={TOTAL_STAGES}
-      stageVh={STAGE_VH}
+      stageVh={isLgUp ? STAGE_VH_DESKTOP : STAGE_VH_MOBILE}
+      scrubSeconds={isLgUp ? 1 : 0.35}
+      skipEntryFade
       stickyClassName={AI_COMPANIES_STICKY}
     >
       {/* Persistent background intelligence — the AI Core, zoomed out, tinting to the
@@ -112,7 +123,7 @@ export function AICompaniesStory() {
         <StoryStage
           key={company.id}
           index={i + 1}
-          className="z-10 items-center justify-center overflow-y-auto overscroll-contain px-4 py-6 lg:overflow-visible lg:py-0"
+          className="z-10 items-center justify-center px-4 py-6 lg:py-0"
         >
           <div
             ref={(el) => {
@@ -130,9 +141,9 @@ export function AICompaniesStory() {
       <StoryStage
         index={N + 1}
         className={cn(
-          "z-10 items-start justify-start overflow-y-auto overscroll-contain",
+          "z-10 items-start justify-start",
           "px-4 pt-2 pb-[max(1.25rem,env(safe-area-inset-bottom))]",
-          "lg:items-center lg:justify-center lg:overflow-visible lg:px-0 lg:py-0",
+          "lg:items-center lg:justify-center lg:px-0 lg:py-0",
         )}
       >
         <EnsembleChapter />

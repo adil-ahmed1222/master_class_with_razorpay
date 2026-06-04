@@ -23,3 +23,8 @@ export function useMediaQuery(query: string, serverSnapshot = false): boolean {
 export function useIsLgUp(): boolean {
   return useMediaQuery("(min-width: 1024px)", false);
 }
+
+/** Touch-first devices — used to tighten scroll-scrub (avoids “stuck” crossfades). */
+export function useIsCoarsePointer(): boolean {
+  return useMediaQuery("(pointer: coarse)", true);
+}

@@ -64,7 +64,15 @@ export function LenisProvider({ children }: { children: ReactNode }) {
   return (
     <ReactLenis
       root
-      options={{ autoRaf: false, lerp: 0.1, smoothWheel: true, wheelMultiplier: 1 }}
+      options={{
+        autoRaf: false,
+        lerp: 0.1,
+        smoothWheel: true,
+        wheelMultiplier: 1,
+        // Keep touch scroll and ScrollTrigger scrub aligned on phones.
+        syncTouch: true,
+        touchMultiplier: 1.25,
+      }}
     >
       <LenisGsapBridge />
       {children}

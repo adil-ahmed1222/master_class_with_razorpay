@@ -10,6 +10,7 @@ import {
 import { gsap } from "@/components/motion/gsap";
 import { useIsomorphicLayoutEffect } from "@/components/motion/use-isomorphic-layout-effect";
 import { usePrefersReducedMotion } from "@/components/motion/use-prefers-reduced-motion";
+import { useIsCoarsePointer } from "@/components/motion/use-media-query";
 import { cn } from "@/lib/utils";
 
 /**
@@ -30,7 +31,8 @@ import { cn } from "@/lib/utils";
  * React renders); CSS sticky pinning. Reduced motion: stacked vertical layout, no scrub.
  */
 
-const SCRUB = 1; // seconds of eased catch-up — deliberate, never snappy
+const SCRUB = 1; // seconds of eased catch-up — deliberate on desktop
+const SCRUB_COARSE_MAX = 0.35; // touch: keep crossfade in sync with finger scroll
 const HOLD = 0.22; // ± plateau (in stage-index units) where a stage stays fully visible
 const FADE = 0.62; // eased fade span after the plateau (creates the overlap window)
 const SHIFT = 40; // px translateY for spatial continuity through the crossover
@@ -104,7 +106,7 @@ const MOBILE_STICKY =
   "sticky top-[var(--nav-h)] z-10 overflow-visible bg-bg/95 py-3 backdrop-blur-sm";
 
 const DEFAULT_STICKY =
-  "sticky top-0 z-10 h-[100svh] max-h-[100svh] overflow-hidden";
+  "sticky top-0 z-10 h-[100svh] max-h-[100svh] touch-pan-y overflow-hidden";
 
 export function ScrollStory({
   stageCount,
@@ -119,6 +121,10 @@ export function ScrollStory({
   children,
 }: ScrollStoryProps) {
   const reduced = usePrefersReducedMotion();
+  const coarsePointer = useIsCoarsePointer();
+  const effectiveScrub = coarsePointer
+    ? Math.min(scrubSeconds, SCRUB_COARSE_MAX)
+    : scrubSeconds;
   const trackRef = useRef<HTMLDivElement>(null);
   const stickyRef = useRef<HTMLDivElement>(null);
   const stagesRef = useRef<Map<number, HTMLElement>>(new Map());
@@ -162,12 +168,15 @@ export function ScrollStory({
         const d = active - index; // signed distance in stage units
         const ad = Math.abs(d);
         const opacity = 1 - smoothstep((ad - HOLD) / FADE);
+        // Only the dominant stage receives pointer events — overlapping fades must not
+        // trap touch scroll inside nested overflow containers (mobile).
+        const isDominant = ad < 0.45;
         gsap.set(el, {
           opacity,
           // Ahead (d<0) waits below; passed (d>0) drifts above → content rises through.
           y: -d * SHIFT,
           scale: 1 - Math.min(ad, 1) * 0.02,
-          pointerEvents: opacity > 0.55 ? "auto" : "none",
+          pointerEvents: isDominant && opacity > 0.5 ? "auto" : "none",
         });
       });
       listeners.forEach((l) => l(p));
@@ -183,7 +192,9 @@ export function ScrollStory({
           trigger: track,
           start: "top top",
           end: "bottom bottom",
-          scrub: scrubSeconds,
+          scrub: effectiveScrub,
+          anticipatePin: 1,
+          invalidateOnRefresh: true,
         },
         onUpdate: () => apply(proxy.value),
       });
@@ -218,7 +229,7 @@ export function ScrollStory({
     }
 
     return () => ctx.revert();
-  }, [reduced, stageCount, stageVh, scrubSeconds, skipEntryFade, pin]);
+  }, [reduced, stageCount, stageVh, effectiveScrub, skipEntryFade, pin]);
 
   if (reduced) {
     return (
