@@ -113,9 +113,10 @@ export function AICompaniesStory() {
           key={company.id}
           index={i + 1}
           className={cn(
-            "z-10 justify-center px-4",
-            "items-start overflow-y-auto overscroll-contain py-4 pb-28",
-            "lg:items-center lg:overflow-visible lg:py-0 lg:pb-0",
+            "z-10 items-center justify-center px-4",
+            /* Reserve dock height only — keeps content centered without a dead zone */
+            "pb-[calc(4.25rem+max(0.75rem,env(safe-area-inset-bottom)))]",
+            "lg:pb-0",
           )}
         >
           <div
