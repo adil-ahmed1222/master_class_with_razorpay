@@ -11,7 +11,7 @@ import {
 import { useIsLgUp } from "@/components/motion/use-media-query";
 import { EventMeta } from "@/components/sections/EventMeta";
 import { BrandMark } from "@/components/sections/BrandLogos";
-import { aiCompanies, type AICompany } from "@/content/ai-companies";
+import { aiCompanies, aiCompaniesIntro, type AICompany } from "@/content/ai-companies";
 import { event } from "@/content/event";
 import { scrollToRegister } from "@/lib/scroll-to-register";
 import { cn } from "@/lib/utils";
@@ -90,19 +90,18 @@ export function AICompaniesStory() {
       {/* Chapter 1 — the opening statement */}
       <StoryStage
         index={0}
-        className="z-10 items-center justify-center px-4 py-6 sm:py-8"
+        className="z-10 items-center justify-center px-4 py-6 pb-8 sm:py-8 lg:pb-0"
       >
         <Container className="relative">
           <div className="mx-auto flex max-w-3xl flex-col items-center gap-7 text-center">
             <Eyebrow tone="accent" withRule>
-              The companies building the AI future
+              {aiCompaniesIntro.eyebrow}
             </Eyebrow>
             <Display as="h2" size="xl">
-              The AI Revolution Is Already Underway
+              {aiCompaniesIntro.headline}
             </Display>
             <Body size="lg" className="max-w-2xl">
-              A new generation of companies is redefining how humans work, learn,
-              communicate, and build. Meet them — one at a time.
+              {aiCompaniesIntro.body}
             </Body>
           </div>
         </Container>
@@ -113,7 +112,11 @@ export function AICompaniesStory() {
         <StoryStage
           key={company.id}
           index={i + 1}
-          className="z-10 items-center justify-center px-4 py-6 lg:py-0"
+          className={cn(
+            "z-10 justify-center px-4",
+            "items-start overflow-y-auto overscroll-contain py-4 pb-28",
+            "lg:items-center lg:overflow-visible lg:py-0 lg:pb-0",
+          )}
         >
           <div
             ref={(el) => {
@@ -179,14 +182,18 @@ export function AICompaniesStory() {
         <div
           ref={registerCtaRef}
           id="ai-companies-register-cta"
-          className="absolute inset-x-0 bottom-6 z-20 px-4 sm:bottom-8"
+          className="absolute inset-x-0 bottom-0 z-20 border-t border-white/10 bg-bg/90 px-4 py-3 backdrop-blur-md pb-[max(0.75rem,env(safe-area-inset-bottom))] lg:bottom-8 lg:border-0 lg:bg-transparent lg:py-0 lg:backdrop-blur-none"
           style={{ display: "none" }}
           aria-hidden
         >
-          <Container>
+          <Container className="p-0 lg:px-6">
             <div className="flex justify-center">
-              <Button size="lg" onClick={handleReserve} className="pointer-events-auto min-h-12">
-                <span className="inline-flex flex-wrap items-center justify-center gap-x-1.5">
+              <Button
+                size="md"
+                onClick={handleReserve}
+                className="pointer-events-auto min-h-11 w-full max-w-md lg:min-h-12 lg:max-w-none lg:px-8"
+              >
+                <span className="inline-flex flex-wrap items-center justify-center gap-x-1.5 text-body lg:text-body-lg">
                   {event.cta.primaryWithPrice}
                   <EventPrice size="sm" />
                 </span>
@@ -214,7 +221,6 @@ type Refs = {
  */
 function StoryConductor({ chapterRefs, glowRef, registerCtaRef }: Refs) {
   const lastIndex = useRef(-2);
-  const lastRegisterVisible = useRef(false);
   const span = TOTAL_STAGES - 1;
 
   useStoryProgress((p) => {
@@ -239,12 +245,6 @@ function StoryConductor({ chapterRefs, glowRef, registerCtaRef }: Refs) {
       registerCtaRef.current.style.display = showRegister ? "block" : "none";
       registerCtaRef.current.setAttribute("aria-hidden", showRegister ? "false" : "true");
     }
-    if (showRegister !== lastRegisterVisible.current) {
-      lastRegisterVisible.current = showRegister;
-      window.dispatchEvent(
-        new CustomEvent("ai-companies-register-cta", { detail: { visible: showRegister } }),
-      );
-    }
   });
 
   return null;
@@ -256,7 +256,7 @@ function CompanyChapter({ company, position }: { company: AICompany; position: n
   const { color } = company;
   return (
     <Container className="relative">
-      <div className="bl-lockup mx-auto flex max-w-4xl flex-col items-center gap-5 text-center sm:gap-6">
+      <div className="bl-lockup mx-auto flex max-w-4xl flex-col items-center gap-4 text-center sm:gap-6">
         {company.bridge ? (
           <p
             className="font-sans text-caption uppercase tracking-[0.18em]"
@@ -291,11 +291,11 @@ function CompanyChapter({ company, position }: { company: AICompany; position: n
           {company.essence}
         </Body>
 
-        <ul className="flex flex-wrap justify-center gap-2.5">
+        <ul className="flex max-w-full flex-wrap justify-center gap-2 sm:gap-2.5">
           {company.capabilities.map((capability) => (
             <li key={capability}>
               <span
-                className="inline-block rounded-pill border px-4 py-1.5 font-sans text-caption text-text"
+                className="inline-block rounded-pill border px-3 py-1 font-sans text-caption text-text sm:px-4 sm:py-1.5"
                 style={{ borderColor: `${color}55`, backgroundColor: `${color}14` }}
               >
                 {capability}
@@ -305,11 +305,11 @@ function CompanyChapter({ company, position }: { company: AICompany; position: n
         </ul>
 
         <div
-          className="mx-auto mt-1 max-w-xl border-l-2 pl-5 text-left"
+          className="mx-auto mt-0 max-w-xl border-l-2 pl-4 text-left sm:mt-1 sm:pl-5"
           style={{ borderColor: color }}
         >
           <p className="font-sans text-overline uppercase text-text-2">In this masterclass</p>
-          <p className="font-sans text-body text-text">{company.connection}</p>
+          <p className="font-sans text-caption text-text sm:text-body">{company.connection}</p>
         </div>
       </div>
     </Container>

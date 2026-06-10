@@ -168,3 +168,11 @@ export const aiCompanies: readonly AICompany[] = [
     reveal: "draw",
   },
 ] as const;
+
+/** Opening chapter — AI companies scroll story (Section 5.5). */
+export const aiCompaniesIntro = {
+  eyebrow: "The companies building the AI future",
+  headline: "They Built the Stack. You're About to Meet It.",
+  body:
+    "A new generation of companies is redefining how humans work, learn, communicate, and build. Meet them — one at a time.",
+} as const;

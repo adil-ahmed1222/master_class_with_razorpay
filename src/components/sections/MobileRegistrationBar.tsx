@@ -8,8 +8,8 @@ import { scrollToRegister } from "@/lib/scroll-to-register";
 /**
  * Mobile sticky CTA — visible site-wide except:
  * - Registration form in view (avoid duplicate CTAs on the form)
- * - Workflow orbital scroll track in view (after Build — immersive demo)
- * - AI companies in-section register CTA in view (avoid double bottom bars)
+ * - Workflow orbital scroll track in view (immersive demo)
+ * - AI companies section in view (uses its own in-section CTA + full-bleed story)
  */
 export function MobileRegistrationBar() {
   const [visible, setVisible] = useState(false);
@@ -17,15 +17,14 @@ export function MobileRegistrationBar() {
   useEffect(() => {
     const registerEl = document.getElementById("register-experience");
     const demoEl = document.getElementById("demo");
-
     const aiCompaniesSection = document.getElementById("ai-companies");
 
     let registerInView = false;
     let workflowInView = false;
-    let aiCompaniesCtaInView = false;
+    let aiCompaniesInView = false;
 
     const update = () => {
-      setVisible(!registerInView && !workflowInView && !aiCompaniesCtaInView);
+      setVisible(!registerInView && !workflowInView && !aiCompaniesInView);
     };
 
     const registerObserver = registerEl
@@ -38,13 +37,15 @@ export function MobileRegistrationBar() {
         )
       : null;
 
-    const aiCompaniesObserver = new IntersectionObserver(
-      (entries) => {
-        aiCompaniesCtaInView = entries.some((e) => e.isIntersecting);
-        update();
-      },
-      { root: null, threshold: 0.5 },
-    );
+    const aiCompaniesObserver = aiCompaniesSection
+      ? new IntersectionObserver(
+          (entries) => {
+            aiCompaniesInView = entries.some((e) => e.isIntersecting);
+            update();
+          },
+          { root: null, threshold: 0.08 },
+        )
+      : null;
 
     let workflowObserver: IntersectionObserver | null = null;
 
@@ -65,61 +66,26 @@ export function MobileRegistrationBar() {
       if (track) observeWorkflowTrack(track);
     };
 
-    const attachAiCompaniesCtaObserver = () => {
-      const cta = document.getElementById("ai-companies-register-cta");
-      aiCompaniesObserver.disconnect();
-      if (!cta || getComputedStyle(cta).display === "none") {
-        aiCompaniesCtaInView = false;
-        update();
-        return;
-      }
-      aiCompaniesObserver.observe(cta);
-    };
-
     const demoMutation = demoEl
       ? new MutationObserver(() => {
           attachWorkflowObserver();
         })
       : null;
 
-    const aiCompaniesMutation = aiCompaniesSection
-      ? new MutationObserver(() => {
-          attachAiCompaniesCtaObserver();
-        })
-      : null;
-
     if (registerEl && registerObserver) registerObserver.observe(registerEl);
+    if (aiCompaniesSection && aiCompaniesObserver) aiCompaniesObserver.observe(aiCompaniesSection);
     if (demoEl && demoMutation) {
       demoMutation.observe(demoEl, { childList: true, subtree: true });
       attachWorkflowObserver();
     }
-    if (aiCompaniesSection && aiCompaniesMutation) {
-      aiCompaniesMutation.observe(aiCompaniesSection, {
-        attributes: true,
-        attributeFilter: ["style"],
-        subtree: true,
-        childList: true,
-      });
-      attachAiCompaniesCtaObserver();
-    }
-
-    const onAiCompaniesCta = (event: Event) => {
-      const visible = (event as CustomEvent<{ visible: boolean }>).detail.visible;
-      aiCompaniesCtaInView = visible;
-      update();
-    };
-
-    window.addEventListener("ai-companies-register-cta", onAiCompaniesCta);
 
     update();
 
     return () => {
-      window.removeEventListener("ai-companies-register-cta", onAiCompaniesCta);
       registerObserver?.disconnect();
-      aiCompaniesObserver.disconnect();
+      aiCompaniesObserver?.disconnect();
       workflowObserver?.disconnect();
       demoMutation?.disconnect();
-      aiCompaniesMutation?.disconnect();
     };
   }, []);
 
