@@ -15,7 +15,7 @@
 | **Title** | Build Your First AI Employee |
 | **Tagline** | Which works 24/7 |
 | **Format** | Live Online Masterclass — two consecutive days |
-| **Dates** | **Saturday 4 July 2026** and **Sunday 5 July 2026** |
+| **Dates** | **Saturday 11 July 2026** and **Sunday 12 July 2026** |
 | **Time** | **2:00 PM – 5:00 PM IST** each day (Asia/Kolkata) |
 | **Total duration** | **6 hours** — 3 hours per session |
 | **Price** | **₹111** (listed value: ₹15,000) |
@@ -28,7 +28,7 @@
 *Six hours. Four production agents. Two live days. No coding. ₹111.*
 
 **Longer pitch for scripts and landing video:**  
-*NeuralVarsity’s two-day live masterclass teaches you to build four no-code production AI agents — a Q&A chatbot, content creator assistant, resume reviewer, and voice news briefing — in six hours across Saturday and Sunday, July 4–5, 2026.*
+*NeuralVarsity’s two-day live masterclass teaches you to build four no-code production AI agents — a Q&A chatbot, content creator assistant, resume reviewer, and voice news briefing — in six hours across Saturday and Sunday, July 11–12, 2026.*
 
 ---
 
@@ -507,7 +507,7 @@ Use for pricing graphics, comparison tables, and “what’s included” reels.
 
 **Ticket summary lines for ads:**
 
-- Saturday 4 & Sunday 5 July 2026  
+- Saturday 11 & Sunday 12 July 2026  
 - 2:00 PM – 5:00 PM IST each day  
 - Live Online  
 - Certificate of completion  
@@ -550,7 +550,7 @@ Use for pricing graphics, comparison tables, and “what’s included” reels.
 | Agents built | 4 |
 | Price | ₹111 |
 | Listed value | ₹15,000 |
-| Dates | 4–5 July 2026 |
+| Dates | 11–12 July 2026 |
 | Time | 2:00 PM – 5:00 PM IST |
 
 ### Tone and voice
@@ -604,7 +604,7 @@ Use these as starting points for editors and designers — not mandatory shot li
 
 - Four agent names on screen  
 - Certificate + career roadmap mention  
-- ₹111 · 4–5 July 2026 · Reserve My Seat  
+- ₹111 · 11–12 July 2026 · Reserve My Seat  
 
 ### Brand aesthetic
 
