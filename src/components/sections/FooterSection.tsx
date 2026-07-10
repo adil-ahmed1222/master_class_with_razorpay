@@ -7,9 +7,11 @@ import { footer } from "@/content/footer";
 import { cn } from "@/lib/utils";
 
 const linkClass = cn(
-  "inline-block font-sans text-body text-text-2 transition-opacity duration-200",
+  "font-sans text-body text-text-2 transition-opacity duration-200",
   "hover:text-text focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-primary",
 );
+
+const emailLinkClass = cn(linkClass, "inline-block max-w-full break-all");
 
 type FooterNavProps = {
   id: string;
@@ -62,12 +64,12 @@ export function FooterSection() {
           </div>
 
           {/* Contact */}
-          <div className="md:col-span-3 lg:col-span-2 md:col-start-6 lg:col-start-6">
+          <div className="min-w-0 md:col-span-3 md:col-start-6 lg:col-span-3 lg:col-start-6">
             <FooterNav id="footer-contact" heading={footer.contact.heading}>
               <ul className="flex flex-col gap-3">
-                <li>
+                <li className="min-w-0">
                   <span className="sr-only">{footer.contact.label}</span>
-                  <a href={footer.contact.href} className={linkClass}>
+                  <a href={footer.contact.href} className={emailLinkClass}>
                     {footer.contact.email}
                   </a>
                 </li>
@@ -76,7 +78,7 @@ export function FooterSection() {
           </div>
 
           {/* Quick links */}
-          <div className="md:col-span-2 lg:col-span-2">
+          <div className="min-w-0 md:col-span-2 lg:col-span-2">
             <FooterNav id="footer-quick-links" heading={footer.quickLinks.heading}>
               <ul className="flex flex-col gap-3">
                 {footer.quickLinks.items.map((item) =>
@@ -86,7 +88,7 @@ export function FooterSection() {
                     </li>
                   ) : (
                     <li key={item.id}>
-                      <a href={item.href} className={linkClass}>
+                      <a href={item.href} className={cn(linkClass, "inline-block")}>
                         {item.label}
                       </a>
                     </li>
@@ -97,7 +99,7 @@ export function FooterSection() {
           </div>
 
           {/* Legal */}
-          <div className="md:col-span-2 lg:col-span-3">
+          <div className="min-w-0 md:col-span-2 lg:col-span-2">
             <FooterNav id="footer-legal" heading={footer.legal.heading}>
               <ul className="flex flex-col gap-3">
                 {footer.legal.items.map((item) => (
@@ -106,6 +108,7 @@ export function FooterSection() {
                       href={item.href}
                       className={cn(
                         linkClass,
+                        "inline-block",
                         item.href === "#" && "pointer-events-none opacity-50",
                       )}
                       aria-disabled={item.href === "#" ? true : undefined}
