@@ -22,7 +22,7 @@ Target **WCAG 2.2 AA**. Accessibility is not optional polish — a registrant wh
 ## Screen Readers & Semantics
 - Semantic HTML: one `<h1>` (hero), correct heading order, `<nav>`, `<main>`, `<section>` with `aria-labelledby`, `<button>` vs `<a>` used correctly.
 - The **3D canvas is `aria-hidden`**; the scroll story's meaning is fully available as real text content (story is never 3D-only — see 05-3d).
-- Countdown announces meaningfully (e.g. `aria-live="polite"` at sensible intervals, not every second; provide a static accessible label like "Event starts July 11, 2026, 2:00 PM IST").
+- Countdown announces meaningfully (e.g. `aria-live="polite"` at sensible intervals, not every second; provide a static accessible label like "Event starts July 18, 2026, 2:00 PM IST").
 - Seats-remaining updates via polite live region, not spammy.
 - Icons are decorative (`aria-hidden`) or have accessible labels.
 

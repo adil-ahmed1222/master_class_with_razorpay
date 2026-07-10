@@ -33,7 +33,7 @@ NeuralVarsity is selling a **two-day, live online, no-code masterclass** where p
 | **Title** | Build Your First AI Employee |
 | **Subtitle** | Learn how to build AI Agents that automate real business tasks without writing code. |
 | **Hero subheadline** | Discover how to create AI Agents that generate leads, automate communication, and perform real business tasks without coding. |
-| **Dates** | **Saturday 11 July 2026** and **Sunday 12 July 2026** |
+| **Dates** | **Saturday 18 July 2026** and **Sunday 19 July 2026** |
 | **Time** | **2:00 PM – 5:00 PM IST** each day |
 | **Duration** | **6 hours** total · **3 hours per session** · two live days |
 | **Timezone** | IST (Asia/Kolkata) |
@@ -139,7 +139,7 @@ Listed at registration:
 
 **Ticket summary lines:**
 
-- Saturday 11 & Sunday 12 July 2026
+- Saturday 11 & Sunday 19 July 2026
 - 2:00 PM – 5:00 PM IST each day
 - Live Online
 - Certificate of completion
@@ -324,7 +324,7 @@ Recap: AI Agents · AI Workflows · AI Companies → **“Now build your first A
 
 ---
 
-## 18. Instructor section
+## 11. Instructor section
 
 > **Status in codebase:** Placeholder — real founder name, bio, photo, achievements, and projects are marked `TODO` and must be replaced before launch. The section shell exists but does not ship fabricated credentials.
 
@@ -353,7 +353,7 @@ Per project rules, the site avoids:
 
 ## 21. One-sentence elevator pitch
 
-**NeuralVarsity’s two-day live masterclass (₹111) teaches you to build four no-code production AI agents — a Q&A chatbot, content creator, resume reviewer, and voice news briefing — in six hours across Saturday and Sunday, July 11–12, 2026.**
+**NeuralVarsity’s two-day live masterclass (₹111) teaches you to build four no-code production AI agents — a Q&A chatbot, content creator, resume reviewer, and voice news briefing — in six hours across Saturday and Sunday, July 18–19, 2026.**
 
 ---
 
