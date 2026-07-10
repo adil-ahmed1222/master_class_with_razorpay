@@ -25,7 +25,7 @@ export const event = {
   sessionHoursPerDay: 3,
   mode: "Live Online Masterclass",
 
-  compareAtPriceInINR: 15000,
+  compareAtPriceInINR: 4999,
   priceInINR: 111,
 
   schedule: {

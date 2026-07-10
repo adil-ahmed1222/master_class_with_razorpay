@@ -49,7 +49,7 @@ export const faq: readonly FaqItem[] = [
     id: "payment",
     question: "How does the registration payment work?",
     answer:
-      "After you submit this form, you proceed to secure checkout for ₹111 (₹15,000 value). Payment confirmation reserves your seat — without it, registration is not complete.",
+      "After you submit this form, you proceed to secure checkout for ₹111 (₹4,999 value). Payment confirmation reserves your seat — without it, registration is not complete.",
   },
   {
     id: "refund",

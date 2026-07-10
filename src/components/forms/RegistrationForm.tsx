@@ -13,6 +13,12 @@ import {
 import { track, type RegistrationFieldKey } from "@/lib/analytics";
 import { formMicrocopy } from "@/content/registration";
 import { cn } from "@/lib/utils";
+import { formatRegistrationPhone } from "@/lib/validation";
+import {
+  createRegistrationOrder,
+  openRazorpayCheckout,
+  verifyRegistrationPayment,
+} from "@/lib/razorpay-checkout";
 
 type FormStatus = "idle" | "submitting" | "success" | "error";
 
@@ -113,14 +119,25 @@ export function RegistrationForm({ formId = "register", className, source }: Reg
     track("registration_submit", { source });
 
     try {
-      // TODO: POST to payment/registration API (later phase).
-      await new Promise((r) => setTimeout(r, 900));
+      const order = await createRegistrationOrder({ ...parsed.data, source });
+      const payment = await openRazorpayCheckout(order, {
+        name: parsed.data.name,
+        email: parsed.data.email,
+        contact: formatRegistrationPhone(parsed.data),
+      });
+      await verifyRegistrationPayment(payment);
       setStatus("success");
       track("registration_success", { source });
-    } catch {
-      setStatus("error");
-      setFormError(formMicrocopy.errorBody);
-      track("registration_error", { source });
+    } catch (error) {
+      setStatus("idle");
+      const message =
+        error instanceof Error ? error.message : formMicrocopy.errorBody;
+      if (message === "Payment cancelled.") {
+        setFormError("Payment was cancelled. Your details are saved — try again when ready.");
+      } else {
+        setFormError(message || formMicrocopy.errorBody);
+        track("registration_error", { source });
+      }
     }
   };
 
