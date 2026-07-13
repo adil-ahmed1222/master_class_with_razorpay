@@ -4,9 +4,10 @@ import { event } from "@/content/event";
 import { isPaymentsConfigured } from "@/lib/env";
 import { getRazorpay, getRazorpayKeyId } from "@/lib/razorpay";
 import {
-  getSupabaseAdmin,
-  REGISTRATIONS_TABLE,
-} from "@/lib/supabase/admin";
+  asRecordId,
+  createRegistration,
+  updateRegistration,
+} from "@/lib/nocodb/registrations";
 import { registrationSchema } from "@/lib/validation";
 
 const createOrderSchema = registrationSchema.extend({
@@ -42,11 +43,10 @@ export async function POST(request: Request) {
   const amountPaise = event.priceInINR * 100;
   const phoneNumber = data.phoneNumber.replace(/\D/g, "");
 
-  const supabase = getSupabaseAdmin();
+  let registrationId: string;
 
-  const { data: registration, error: insertError } = await supabase
-    .from(REGISTRATIONS_TABLE)
-    .insert({
+  try {
+    const registration = await createRegistration({
       full_name: data.name,
       email: data.email,
       phone_number: phoneNumber,
@@ -56,20 +56,23 @@ export async function POST(request: Request) {
       amount_paid: event.priceInINR,
       payment_status: "unpaid",
       course_name: courseName,
-    })
-    .select("id")
-    .single();
-
-  if (insertError || !registration) {
-    console.error("Supabase insert failed:", {
-      code: insertError?.code,
-      message: insertError?.message,
-      details: insertError?.details,
-      hint: insertError?.hint,
     });
+    registrationId = asRecordId(registration.Id);
+  } catch (error) {
+    console.error("NocoDB insert failed:", error);
+    const isAuth =
+      error instanceof Error &&
+      (error.message.toLowerCase().includes("invalid token") ||
+        error.message.toLowerCase().includes("authentication") ||
+        ("status" in error && (error as { status?: number }).status === 401));
+
     return NextResponse.json(
-      { error: "Could not save registration. Try again." },
-      { status: 500 },
+      {
+        error: isAuth
+          ? "NocoDB API token is invalid. Create a new token in NocoDB and update NOCODB_API_TOKEN in .env.local."
+          : "Could not save registration. Try again.",
+      },
+      { status: isAuth ? 401 : 500 },
     );
   }
 
@@ -78,25 +81,22 @@ export async function POST(request: Request) {
     const order = await razorpay.orders.create({
       amount: amountPaise,
       currency: "INR",
-      receipt: registration.id.replace(/-/g, "").slice(0, 40),
+      receipt: `reg_${registrationId}`.slice(0, 40),
       notes: {
-        registration_id: registration.id,
+        registration_id: registrationId,
         email: data.email,
         source: data.source,
       },
     });
 
-    const { error: updateError } = await supabase
-      .from(REGISTRATIONS_TABLE)
-      .update({ order_id: order.id })
-      .eq("id", registration.id);
-
-    if (updateError) {
-      console.error("Supabase order update failed:", updateError);
+    try {
+      await updateRegistration(registrationId, { order_id: order.id });
+    } catch (updateError) {
+      console.error("NocoDB order update failed:", updateError);
     }
 
     return NextResponse.json({
-      registrationId: registration.id,
+      registrationId,
       orderId: order.id,
       amount: amountPaise,
       currency: "INR",
@@ -105,10 +105,11 @@ export async function POST(request: Request) {
   } catch (error) {
     console.error("Razorpay order creation failed:", error);
 
-    await supabase
-      .from(REGISTRATIONS_TABLE)
-      .update({ payment_status: "failed" })
-      .eq("id", registration.id);
+    try {
+      await updateRegistration(registrationId, { payment_status: "failed" });
+    } catch (updateError) {
+      console.error("NocoDB failed-status update failed:", updateError);
+    }
 
     return NextResponse.json(
       { error: "Could not start payment. Try again." },

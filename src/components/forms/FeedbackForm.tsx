@@ -57,12 +57,21 @@ export function FeedbackForm({ formId = "feedback", className }: FeedbackFormPro
     track("feedback_submit");
 
     try {
-      // TODO: POST feedback to API / store (later phase).
-      await new Promise((r) => setTimeout(r, 700));
+      const res = await fetch("/api/feedback", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(parsed.data),
+      });
+      const payload = (await res.json()) as { error?: string };
+      if (!res.ok) {
+        throw new Error(payload.error ?? feedbackMicrocopy.errorBody);
+      }
       setStatus("success");
-    } catch {
+    } catch (error) {
       setStatus("error");
-      setFormError(feedbackMicrocopy.errorBody);
+      setFormError(
+        error instanceof Error ? error.message : feedbackMicrocopy.errorBody,
+      );
     }
   };
 

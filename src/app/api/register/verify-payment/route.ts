@@ -1,14 +1,14 @@
 import { NextResponse } from "next/server";
 import { z } from "zod";
-import {
-  getSupabaseAdmin,
-  REGISTRATIONS_TABLE,
-} from "@/lib/supabase/admin";
-import { verifyRazorpaySignature } from "@/lib/razorpay";
 import { isPaymentsConfigured } from "@/lib/env";
+import { verifyRazorpaySignature } from "@/lib/razorpay";
+import {
+  getRegistrationById,
+  updateRegistration,
+} from "@/lib/nocodb/registrations";
 
 const verifyPaymentSchema = z.object({
-  registrationId: z.string().uuid(),
+  registrationId: z.string().min(1),
   razorpay_order_id: z.string().min(1),
   razorpay_payment_id: z.string().min(1),
   razorpay_signature: z.string().min(1),
@@ -57,15 +57,18 @@ export async function POST(request: Request) {
     );
   }
 
-  const supabase = getSupabaseAdmin();
+  let registration;
+  try {
+    registration = await getRegistrationById(registrationId);
+  } catch (error) {
+    console.error("NocoDB fetch failed:", error);
+    return NextResponse.json(
+      { error: "Could not load registration." },
+      { status: 500 },
+    );
+  }
 
-  const { data: registration, error: fetchError } = await supabase
-    .from(REGISTRATIONS_TABLE)
-    .select("id, order_id, payment_status")
-    .eq("id", registrationId)
-    .single();
-
-  if (fetchError || !registration) {
+  if (!registration) {
     return NextResponse.json(
       { error: "Registration not found." },
       { status: 404 },
@@ -83,18 +86,15 @@ export async function POST(request: Request) {
     return NextResponse.json({ ok: true });
   }
 
-  const { error: updateError } = await supabase
-    .from(REGISTRATIONS_TABLE)
-    .update({
+  try {
+    await updateRegistration(registrationId, {
       payment_status: "paid",
       order_id: razorpay_order_id,
       payment_id: razorpay_payment_id,
       payment_signature: razorpay_signature,
-    })
-    .eq("id", registrationId);
-
-  if (updateError) {
-    console.error("Supabase payment update failed:", updateError);
+    });
+  } catch (error) {
+    console.error("NocoDB payment update failed:", error);
     return NextResponse.json(
       { error: "Could not confirm payment." },
       { status: 500 },

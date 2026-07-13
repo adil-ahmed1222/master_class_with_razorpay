@@ -15,14 +15,18 @@ Production landing page — hero through registration, workflow demo, FAQ, and f
 - **GSAP + ScrollTrigger**, **Framer Motion**, **Lenis** (motion — later phase)
 - **React Three Fiber + Three.js** (WebGPU-first 3D — later phase)
 - **Zod** (validation) · **web-vitals** (perf reporting)
+- **NocoDB** (registrations + feedback persistence via Data API)
+- **Razorpay** (checkout + payment verification)
 
 ## Getting Started
 
 ```bash
 npm install
-cp .env.example .env.local   # then edit values
+cp .env.example .env.local   # then edit NocoDB + Razorpay values
 npm run dev                  # http://localhost:3000
 ```
+
+See `scripts/nocodb-setup.md` for table columns and token setup.
 
 Scripts: `dev`, `build`, `start`, `lint`, `typecheck`, `favicons`.
 
@@ -30,11 +34,11 @@ Scripts: `dev`, `build`, `start`, `lint`, `typecheck`, `favicons`.
 
 ```
 src/
-  app/            Router, root layout, global tokens (globals.css)
+  app/            Router, API routes, root layout, global tokens
   components/     sections, ui, workflow-demo, forms, motion, background
   content/        Typed single-source content (event, agenda, faq, ...)
-  lib/            fonts, env, utils, analytics, validation, countdown
-scripts/          favicon generation
+  lib/            nocodb, razorpay, env, validation, analytics, ...
+scripts/          favicon generation, NocoDB setup notes
 .cursor/rules/    Context Engineering rules (source of truth)
 ```
 
