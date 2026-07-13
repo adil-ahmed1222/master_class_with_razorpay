@@ -1,6 +1,6 @@
 # NocoDB setup — Masterclass backend
 
-Use this checklist so the Next.js app can store registrations and feedback in NocoDB only.
+Use this checklist so the Next.js app can store registrations, surveys, and optional pre-session feedback in NocoDB.
 
 ## 1. Create an API token
 
@@ -10,18 +10,15 @@ Use this checklist so the Next.js app can store registrations and feedback in No
 
 ## 2. Set base URL
 
-- Cloud: `https://app.nocodb.com` (or your workspace host)
-- Self-hosted: `http://localhost:8080` (or your domain)
+Put your host in `.env.local` as `NOCODB_BASE_URL` (no trailing slash), e.g.:
 
-Put it in `.env.local` as `NOCODB_BASE_URL` (no trailing slash).
+`https://nocodb.neuralvarsity.ai`
 
-## 3. Create table: `masterclass_registrations`
-
-Columns (names must match exactly):
+## 3. Table: `masterclass_registrations` (done)
 
 | Column | Type | Notes |
 |---|---|---|
-| Id | System / Number | Auto (NocoDB primary key) |
+| Id | System / Number | Auto PK |
 | full_name | Single line text | required |
 | email | Email / Single line text | required |
 | phone_number | Single line text | required |
@@ -35,14 +32,42 @@ Columns (names must match exactly):
 | payment_status | Single line text | default `unpaid` |
 | course_name | Single line text | default `AI Masterclass` |
 
-Copy the table ID from:
-
-`Base → Table → ... → REST APIs`  
-or from the URL path `/api/v2/tables/{tableId}/...`
-
 Set `NOCODB_REGISTRATIONS_TABLE_ID`.
 
-## 4. Create table: `masterclass_feedback`
+## 4. Table: `masterclass_survey` (post-attendance)
+
+Independent from registrations. Soft-linked via optional `email` / `registration_id` only.
+
+Created via `node scripts/create-survey-table.mjs` (current table id: `m3tw06v9hkk5ugy`).
+
+| Column | Type | Notes |
+|---|---|---|
+| Id | System / Number | Auto PK |
+| CreatedAt / UpdatedAt | System timestamps | Auto |
+| full_name | Single line text | optional |
+| email | Email | soft link to registrant |
+| registration_id | Single line text | optional soft ref to registration Id |
+| phone_number | Single line text | optional |
+| course_name | Single line text | which masterclass |
+| overall_rating | Rating (1–5) | overall experience |
+| content_rating | Rating (1–5) | content quality |
+| instructor_rating | Rating (1–5) | instructor quality |
+| recommendation_score | Number (0–10) | NPS-style |
+| most_valuable | Long text | open feedback |
+| what_to_improve | Long text | open feedback |
+| would_attend_again | Single select | `Yes` / `No` / `Maybe` |
+| topics_for_next | Long text | future topics |
+| testimonial | Long text | optional quote |
+| allow_testimonial_use | Checkbox | marketing consent |
+| session_date | Date | masterclass date (`YYYY-MM-DD`) |
+
+Set `NOCODB_SURVEY_TABLE_ID`.
+
+API: `POST /api/survey`
+
+## 5. Optional table: `masterclass_feedback` (pre-session)
+
+Used by the landing-page optional form before the event (not post-attendance).
 
 | Column | Type |
 |---|---|
@@ -53,29 +78,29 @@ Set `NOCODB_REGISTRATIONS_TABLE_ID`.
 | ai_experience_level | Single line text |
 | biggest_challenge | Long text |
 
-Set `NOCODB_FEEDBACK_TABLE_ID`.
+Set `NOCODB_FEEDBACK_TABLE_ID` only if you use that form.
 
-## 5. Env checklist
+## 6. Env checklist
 
 ```env
 NOCODB_BASE_URL=...
 NOCODB_API_TOKEN=...
 NOCODB_REGISTRATIONS_TABLE_ID=...
-NOCODB_FEEDBACK_TABLE_ID=...
+NOCODB_SURVEY_TABLE_ID=...
+NOCODB_FEEDBACK_TABLE_ID=...   # optional
 RAZORPAY_KEY_ID=...
 RAZORPAY_KEY_SECRET=...
 NEXT_PUBLIC_RAZORPAY_KEY_ID=...
 ```
 
-## 6. Restart the app
+## 7. Restart the app
 
 ```bash
 npm run dev
 ```
 
-Flow:
+Flows:
 
-1. Form submit → NocoDB insert (`payment_status=unpaid`)
-2. Razorpay checkout
-3. Verify signature → NocoDB update (`paid` + payment fields)
-4. Feedback form → NocoDB insert into feedback table
+1. Register → NocoDB registrations + Razorpay
+2. After the masterclass → `POST /api/survey` → NocoDB `masterclass_survey`
+3. Optional pre-session feedback → `POST /api/feedback`

@@ -36,6 +36,7 @@ const serverSchema = z.object({
   NOCODB_API_TOKEN: optionalNonEmptyString,
   NOCODB_REGISTRATIONS_TABLE_ID: optionalNonEmptyString,
   NOCODB_FEEDBACK_TABLE_ID: optionalNonEmptyString,
+  NOCODB_SURVEY_TABLE_ID: optionalNonEmptyString,
   RAZORPAY_KEY_ID: optionalNonEmptyString,
   RAZORPAY_KEY_SECRET: optionalNonEmptyString,
 });
@@ -64,6 +65,7 @@ const parsedServer = serverSchema.safeParse({
   NOCODB_API_TOKEN: process.env.NOCODB_API_TOKEN,
   NOCODB_REGISTRATIONS_TABLE_ID: process.env.NOCODB_REGISTRATIONS_TABLE_ID,
   NOCODB_FEEDBACK_TABLE_ID: process.env.NOCODB_FEEDBACK_TABLE_ID,
+  NOCODB_SURVEY_TABLE_ID: process.env.NOCODB_SURVEY_TABLE_ID,
   RAZORPAY_KEY_ID: process.env.RAZORPAY_KEY_ID,
   RAZORPAY_KEY_SECRET: process.env.RAZORPAY_KEY_SECRET,
 });
@@ -99,5 +101,14 @@ export function isFeedbackConfigured(): boolean {
     serverEnv.NOCODB_BASE_URL &&
       serverEnv.NOCODB_API_TOKEN &&
       serverEnv.NOCODB_FEEDBACK_TABLE_ID,
+  );
+}
+
+/** True when post-masterclass survey persistence can run. */
+export function isSurveyConfigured(): boolean {
+  return Boolean(
+    serverEnv.NOCODB_BASE_URL &&
+      serverEnv.NOCODB_API_TOKEN &&
+      serverEnv.NOCODB_SURVEY_TABLE_ID,
   );
 }

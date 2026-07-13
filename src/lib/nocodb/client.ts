@@ -80,3 +80,11 @@ export function feedbackTableId(): string {
   }
   return id;
 }
+
+export function surveyTableId(): string {
+  const id = serverEnv.NOCODB_SURVEY_TABLE_ID;
+  if (!id) {
+    throw new Error("NOCODB_SURVEY_TABLE_ID is not configured.");
+  }
+  return id;
+}

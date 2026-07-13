@@ -8,7 +8,7 @@ import {
 
 /**
  * Validation architecture — shared schemas for client + server (09-forms, 12-coding-standards).
- * Single source of truth for the registration and feedback contracts.
+ * Single source of truth for registration, pre-session feedback, and post-attendance survey.
  */
 
 export const experienceLevels = [
@@ -64,6 +64,65 @@ export const feedbackSchema = z.object({
   biggestChallenge: z.string().trim().max(500).optional(),
 });
 export type FeedbackInput = z.infer<typeof feedbackSchema>;
+
+export const attendAgainOptions = ["Yes", "No", "Maybe"] as const;
+export type AttendAgainOption = (typeof attendAgainOptions)[number];
+
+/**
+ * Post-attendance Masterclass Survey — independent of registration storage.
+ * Soft-linked via optional email / registrationId only (no hard DB join required).
+ */
+export const surveySchema = z
+  .object({
+    fullName: z.string().trim().max(80).optional(),
+    email: z
+      .string()
+      .trim()
+      .toLowerCase()
+      .email("Enter a valid email.")
+      .optional()
+      .or(z.literal("")),
+    registrationId: z.string().trim().max(80).optional(),
+    phoneNumber: z.string().trim().max(20).optional(),
+    courseName: z.string().trim().max(200).optional(),
+    overallRating: z.number().int().min(1).max(5).optional(),
+    contentRating: z.number().int().min(1).max(5).optional(),
+    instructorRating: z.number().int().min(1).max(5).optional(),
+    recommendationScore: z.number().int().min(0).max(10).optional(),
+    mostValuable: z.string().trim().max(2000).optional(),
+    whatToImprove: z.string().trim().max(2000).optional(),
+    wouldAttendAgain: z.enum(attendAgainOptions).optional(),
+    topicsForNext: z.string().trim().max(2000).optional(),
+    testimonial: z.string().trim().max(2000).optional(),
+    allowTestimonialUse: z.boolean().optional(),
+    sessionDate: z
+      .string()
+      .trim()
+      .regex(/^\d{4}-\d{2}-\d{2}$/, "Use YYYY-MM-DD.")
+      .optional()
+      .or(z.literal("")),
+  })
+  .superRefine((data, ctx) => {
+    const hasAnyResponse =
+      data.overallRating != null ||
+      data.contentRating != null ||
+      data.instructorRating != null ||
+      data.recommendationScore != null ||
+      Boolean(data.mostValuable?.trim()) ||
+      Boolean(data.whatToImprove?.trim()) ||
+      data.wouldAttendAgain != null ||
+      Boolean(data.topicsForNext?.trim()) ||
+      Boolean(data.testimonial?.trim());
+
+    if (!hasAnyResponse) {
+      ctx.addIssue({
+        code: "custom",
+        message: "Add at least one survey response before submitting.",
+        path: ["overallRating"],
+      });
+    }
+  });
+export type SurveyInput = z.infer<typeof surveySchema>;
 
 /** Helper: flatten a ZodError into field → message for form rendering. */
 export function fieldErrors(error: z.ZodError): Record<string, string> {
