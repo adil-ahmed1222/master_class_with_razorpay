@@ -14,10 +14,10 @@ export const event = {
   heroSubheadline:
     "Discover how to create AI Agents that generate leads, automate communication, and perform real business tasks without coding.",
 
-  // Day 1: Saturday 18 July 2026, 2:00 PM IST. Countdown targets first session.
-  startsAt: new Date("2026-07-18T14:00:00+05:30"),
-  // Day 2: Sunday 19 July 2026, 5:00 PM IST (end of second session).
-  endsAt: new Date("2026-07-19T17:00:00+05:30"),
+  // Day 1: Saturday 25 July 2026, 2:00 PM IST. Countdown targets first session.
+  startsAt: new Date("2026-07-25T14:00:00+05:30"),
+  // Day 2: Sunday 26 July 2026, 5:00 PM IST (end of second session).
+  endsAt: new Date("2026-07-26T17:00:00+05:30"),
   timezone: "Asia/Kolkata",
   timezoneLabel: "IST",
 
@@ -29,15 +29,15 @@ export const event = {
   priceInINR: 111,
 
   schedule: {
-    heroEyebrow: "Live Online Masterclass · 18–19 Jul 2026",
-    datePill: "Sat 18 & Sun 19 Jul 2026",
+    heroEyebrow: "Live Online Masterclass · 25–26 Jul 2026",
+    datePill: "Sat 25 & Sun 26 Jul 2026",
     timePill: "2:00 PM – 5:00 PM IST · Sat & Sun",
-    footerDate: "Saturday 18 & Sunday 19 July 2026",
+    footerDate: "Saturday 25 & Sunday 26 July 2026",
     footerTime: "2:00 PM – 5:00 PM IST · Saturday & Sunday",
     durationLabel: "6 hours · 2 live sessions",
     finalCtaPriceSuffix: "· two live sessions · 3 hours each day",
     countdownAriaLabel:
-      "Time remaining until the masterclass begins on Saturday 18 July 2026 at 2:00 PM IST",
+      "Time remaining until the masterclass begins on Saturday 25 July 2026 at 2:00 PM IST",
   },
 
   // Seats remaining is config-driven, never random (04-conversion).

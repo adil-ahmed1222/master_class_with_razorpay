@@ -1,6 +1,6 @@
 # NeuralVarsity — Agentic AI Masterclass Landing Page
 
-Premium event-registration landing page for **Build Your First AI Employee** (18–19 Jul 2026 · two-day live online · ₹111). Its single job: convert visitors into registrants.
+Premium event-registration landing page for **Build Your First AI Employee** (25–26 Jul 2026 · two-day live online · ₹111). Its single job: convert visitors into registrants.
 
 > Governance lives in `.cursor/rules/` (12 Context Engineering rules). Read those before contributing.
 

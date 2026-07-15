@@ -23,7 +23,7 @@ A completed registration (Name, Email, Phone, College/Company, Experience Level)
 - Reduce cognitive load: one decision per screen. Don't ask the user to compare plans (there is one offer).
 
 ## Urgency & Scarcity (real, never fake)
-- **Countdown timer** to July 18, 2026 2:00 PM IST — in hero and final CTA.
+- **Countdown timer** to July 25, 2026 2:00 PM IST — in hero and final CTA.
 - **Seats Remaining** indicator — must be backed by a real/config-driven number, not random JS. If decrementing, base it on actual data or a documented controlled value; never invent live fake counts.
 - Calm urgency language (see brand voice). No blinking red, no fake "3 people viewing".
 
