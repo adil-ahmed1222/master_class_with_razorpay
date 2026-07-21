@@ -27,7 +27,7 @@ export const ticketSummary = {
   label: "Your ticket",
   lines: [
     "Saturday 25 & Sunday 26 July 2026",
-    "2:00 PM – 5:00 PM IST each day",
+    "7:00 PM – 10:00 PM IST each day",
     "Live Online",
     "Certificate of completion",
     "Free career roadmap",
@@ -47,7 +47,7 @@ export const formMicrocopy = {
   pending: "Reserving your seat…",
   successTitle: "You're in.",
   successBody:
-    "Check your email for your live access link. Your certificate and career roadmap arrive after you complete both days. See you Saturday 25 July, 2:00 PM IST.",
+    "Check your email for your live access link. Your certificate and career roadmap arrive after you complete both days. See you Saturday 25 July, 7:00 PM IST.",
   errorBody: "Something went wrong. Your details are still here — try again in a moment.",
 } as const;
 

@@ -13,6 +13,10 @@ type SeatCounterProps = {
   total: number;
   /** Fraction at/below which the urgency tone kicks in. */
   lowThreshold?: number;
+  /** Optional "Next seat in" countdown label, e.g. "03h 59m 59s". */
+  nextSeatLabel?: string;
+  /** When true, show the fully-allocated message instead of a countdown. */
+  isFull?: boolean;
   className?: string;
 };
 
@@ -20,6 +24,8 @@ export function SeatCounter({
   remaining,
   total,
   lowThreshold = 0.2,
+  nextSeatLabel,
+  isFull = false,
   className,
 }: SeatCounterProps) {
   const safeTotal = Math.max(1, total);
@@ -60,9 +66,21 @@ export function SeatCounter({
           style={{ width: `${filledPct}%` }}
         />
       </div>
-      {isLow ? (
-        <p className="font-sans text-caption text-accent">Filling fast — reserve now.</p>
-      ) : null}
+      <div className="flex items-baseline justify-between gap-4">
+        {isLow ? (
+          <p className="font-sans text-caption text-accent">Filling fast — reserve now.</p>
+        ) : (
+          <span aria-hidden />
+        )}
+        {isFull ? (
+          <p className="font-sans text-caption text-text-2">All seats allocated</p>
+        ) : nextSeatLabel ? (
+          <p className="font-sans text-caption text-text-2">
+            Next seat in:{" "}
+            <span className="tabular-nums text-text">{nextSeatLabel}</span>
+          </p>
+        ) : null}
+      </div>
     </div>
   );
 }

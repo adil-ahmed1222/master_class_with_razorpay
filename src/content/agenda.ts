@@ -15,7 +15,7 @@ export const agendaSection = {
   eyebrow: "Two days",
   title: "Six hours. Four production agents.",
   description:
-    "Three hours each day — Saturday and Sunday, 2:00 PM to 5:00 PM IST. Each session moves from foundations to finished work. By Sunday evening, four agents exist in the world — not on a slide.",
+    "Three hours each day — Saturday and Sunday, 7:00 PM to 10:00 PM IST. Each session moves from foundations to finished work. By Sunday evening, four agents exist in the world — not on a slide.",
 } as const;
 
 export const agenda: readonly AgendaHour[] = [

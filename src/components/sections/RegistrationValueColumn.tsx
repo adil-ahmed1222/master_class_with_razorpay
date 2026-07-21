@@ -1,5 +1,5 @@
 import { Eyebrow, Body, Caption, EventPrice } from "@/components/ui";
-import { CountdownTimer, SeatCounter } from "@/components/ui";
+import { CountdownTimer, LiveSeatCounter } from "@/components/ui";
 import { EventMeta } from "@/components/sections/EventMeta";
 import { event } from "@/content/event";
 import { registrationBenefits, whyAttend } from "@/content/registration";
@@ -36,11 +36,7 @@ export function RegistrationValueColumn({ showHeader = true }: RegistrationValue
           target={event.startsAt}
           ariaLabel={event.schedule.countdownAriaLabel}
         />
-        <SeatCounter
-          remaining={event.seatsRemaining}
-          total={event.seatsTotal}
-          className="max-w-sm"
-        />
+        <LiveSeatCounter className="max-w-sm" />
         <p className="font-sans text-caption text-text-2">
           <span className="inline-flex flex-wrap items-baseline gap-x-2 gap-y-1">
             <span>{`${event.schedule.durationLabel} · ${event.mode} ·`}</span>

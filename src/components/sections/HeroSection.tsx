@@ -1,7 +1,7 @@
 "use client";
 
 import { motion, useReducedMotion, type Variants } from "framer-motion";
-import { Container, EventTitle, Body, Eyebrow, Button, CountdownTimer, SeatCounter } from "@/components/ui";
+import { Container, EventTitle, Body, Eyebrow, Button, CountdownTimer, LiveSeatCounter } from "@/components/ui";
 import { EventMeta } from "@/components/sections/EventMeta";
 import { event } from "@/content/event";
 import { scrollToRegister } from "@/lib/scroll-to-register";
@@ -97,11 +97,7 @@ export function HeroSection() {
                 ariaLabel={event.schedule.countdownAriaLabel}
               />
             </div>
-            <SeatCounter
-              remaining={event.seatsRemaining}
-              total={event.seatsTotal}
-              className="max-w-sm"
-            />
+            <LiveSeatCounter className="max-w-sm" />
           </motion.div>
         </motion.div>
       </Container>

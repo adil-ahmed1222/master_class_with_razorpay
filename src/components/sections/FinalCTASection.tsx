@@ -5,7 +5,7 @@ import {
   Body,
   Eyebrow,
   CountdownTimer,
-  SeatCounter,
+  LiveSeatCounter,
   EventPrice,
 } from "@/components/ui";
 import { FinalCTAActions } from "@/components/sections/FinalCTAActions";
@@ -49,11 +49,7 @@ export function FinalCTASection() {
                 className="w-full justify-center"
               />
             </div>
-            <SeatCounter
-              remaining={event.seatsRemaining}
-              total={event.seatsTotal}
-              className="w-full"
-            />
+            <LiveSeatCounter className="w-full" />
             <p className="flex flex-wrap items-baseline justify-center gap-x-2 gap-y-1 font-display text-h3 text-text">
               <EventPrice size="lg" />
               <span className="font-sans text-body text-text-2">
